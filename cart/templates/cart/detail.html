@@ -1,0 +1,70 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Your shopping cart{% endblock %}
+
+{% block content %}
+<h1>Your Shopping Cart</h1>
+<table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+        <tr style="background: #f5f5f5; text-align: left;">
+            <th style="padding: 10px;">Product</th>
+            <th style="padding: 10px;">Quantity</th>
+            <th style="padding: 10px;">Unit Price</th>
+            <th style="padding: 10px;">Price</th>
+            <th style="padding: 10px;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart %}
+        {% with product=item.product %}
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px;">
+                <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: inherit;">
+                    {{ product.name }}
+                </a>
+                <div style="font-size: 0.85rem; color: #666; margin-top: 5px;">
+                    {% if item.custom_message %}
+                    <p style="margin: 0;">Msg: "{{ item.custom_message }}"</p>
+                    {% endif %}
+                    {% if item.addons_objects %}
+                    <p style="margin: 0;">Add-ons:
+                        {% for addon in item.addons_objects %}
+                        {{ addon.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+            </td>
+            <td style="padding: 10px;">
+                <form action="{% url 'cart:cart_update' item.cart_id %}" method="post">
+                    {% csrf_token %}
+                    {{ item.update_quantity_form.quantity }}
+                    {{ item.update_quantity_form.override }}
+                    <input type="submit" value="Update" style="padding: 2px 5px;">
+                </form>
+            </td>
+            <td style="padding: 10px;">${{ item.price }}</td>
+            <td style="padding: 10px;">${{ item.total_price }}</td>
+            <td style="padding: 10px;">
+                <form action="{% url 'cart:cart_remove' item.cart_id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Remove"
+                        style="background: #d9534f; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                </form>
+            </td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+        <tr style="background: #fafafa; font-weight: bold;">
+            <td colspan="3" style="padding: 10px; text-align: right;">Total</td>
+            <td colspan="2" style="padding: 10px;">${{ cart.get_total_price }}</td>
+        </tr>
+    </tbody>
+</table>
+<div style="margin-top: 20px; text-align: right;">
+    <a href="{% url 'store:product_list' %}" class="btn" style="background-color: #777; margin-right: 10px;">Continue
+        Shopping</a>
+    <a href="{% url 'orders:order_create' %}" class="btn">Checkout</a>
+</div>
+{% endblock %}

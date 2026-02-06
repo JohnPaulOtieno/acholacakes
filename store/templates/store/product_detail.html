@@ -1,0 +1,67 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ product.name }} - Achola Cakes{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-images">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="margin-bottom: 10px;">
+        {% else %}
+        <img src="https://via.placeholder.com/500x400?text=No+Image" alt="No image">
+        {% endif %}
+
+        <!-- Additional Images Gallery -->
+        <div style="display: flex; gap: 10px; overflow-x: auto;">
+            {% for img in product.images.all %}
+            <img src="{{ img.image.url }}" alt="{{ product.name }}"
+                style="width: 80px; height: 80px; object-fit: cover;">
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="detail-info">
+        <h1>{{ product.name }}</h1>
+        <p class="product-price" style="font-size: 1.5rem;">${{ product.price }}</p>
+
+        <div class="meta-info">
+            <p><strong>Size:</strong> {{ product.size }}</p>
+            <p><strong>Category:</strong> {{ product.category.name }}</p>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+        <h3>Description</h3>
+        <p>{{ product.description|linebreaks }}</p>
+
+        {% if product.ingredients %}
+        <h3>Ingredients & Allergens</h3>
+        <p>{{ product.ingredients|linebreaks }}</p>
+        {% endif %}
+
+        <div style="margin-top: 30px;">
+            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                {% csrf_token %}
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; margin-bottom: 5px;">Custom Message (Optional)</label>
+                    {{ cart_product_form.custom_message }}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; margin-bottom: 5px;">Add-ons</label>
+                    <div class="addons-list">
+                        {{ cart_product_form.addons }}
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    {{ cart_product_form.quantity }}
+                    {{ cart_product_form.override }}
+                </div>
+                <input type="submit" value="Add to Cart" class="btn"
+                    style="border: none; cursor: pointer; font-size: 1.2rem;">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

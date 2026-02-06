@@ -1,0 +1,39 @@
+{% extends "store/base.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div style="display: flex; gap: 50px;">
+    <div style="flex: 1;">
+        <h1>Contact Us</h1>
+        <p>Have a question about a custom order?</p>
+        <form action="." method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                <label>Your Email:</label>
+                {{ form.from_email }}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>Subject:</label>
+                {{ form.subject }}
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>Message:</label><br>
+                {{ form.message }}
+            </div>
+            <button type="submit" class="btn" style="border: none; cursor: pointer;">Send Message</button>
+        </form>
+    </div>
+    <div style="flex: 1;">
+        <h2>Find Us</h2>
+        <p>123 Bakery Lane<br>Nairobi, Kenya</p>
+        <p><strong>Phone:</strong> +254 700 000000</p>
+        <p><strong>Email:</strong> hello@acholacakes.com</p>
+
+        <div
+            style="background: #eee; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+            <p>Google Map Placeholder</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

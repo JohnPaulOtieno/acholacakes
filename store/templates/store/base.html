@@ -1,0 +1,323 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Achola Cakes{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <header style="background: white; border-bottom: 5px solid #fafafa; padding: 20px 0;">
+        <div class="header-inner"
+            style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+
+            <!-- Left: Store Locator / Info -->
+            <div class="header-left" style="flex: 1; display:flex; align-items:center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="var(--color-milk-choco)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="margin-right:8px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span
+                    style="color: var(--color-milk-choco); font-weight: bold; font-family: 'Lato', sans-serif;">Nairobi,
+                    Kenya</span>
+            </div>
+
+            <!-- Center: Circular Logo -->
+            <div class="header-center" style="flex: 1; text-align: center;">
+                <a href="{% url 'store:product_list' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Achola Cakes"
+                        style="height: 120px; width: 120px; object-fit: cover; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                </a>
+            </div>
+
+            <!-- Right: Icons (Search, User, Cart) -->
+            <div class="header-right"
+                style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 20px;">
+
+                <!-- Search Icon -->
+                <div class="header-icon search-wrapper" style="position: relative;">
+                    <form action="{% url 'store:product_list' %}" method="get"
+                        style="display:flex; align-items:center;">
+                        <input type="text" name="query" placeholder="Search..."
+                            style="border:none; border-bottom: 1px solid #ccc; padding: 5px; width: 120px; font-size: 0.9rem; outline:none;">
+                        <button type="submit" style="background:none; border:none; cursor:pointer;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- User Icon -->
+                <div class="header-icon user-wrapper">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form-header').submit();"
+                        title="Logout ({{ user.username }})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    <form id="logout-form-header" action="{% url 'logout' %}" method="post" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}" title="Login / Register">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Cart Icon -->
+                <div class="header-icon cart-wrapper" style="position: relative;">
+                    <a href="{% url 'cart:cart_detail' %}" style="text-decoration: none; color: inherit;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        {% with total_items=cart|length %}
+                        {% if total_items > 0 %}
+                        <span
+                            style="position:absolute; top:-8px; right:-8px; background:var(--color-gold); color:white; border-radius:50%; width:18px; height:18px; font-size:10px; display:flex; justify-content:center; align-items:center;">{{
+                            total_items }}</span>
+                        {% endif %}
+                        {% endwith %}
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Navigation Bar (Below Header) -->
+        <nav style="text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; gap: 30px;">
+                <li><a href="{% url 'store:product_list' %}" class="{% if not category %}active{% endif %}">Home &
+                        Shop</a></li>
+                {% for c in categories %}
+                <li><a href="{% url 'store:product_list_by_category' c.slug %}"
+                        style="text-decoration: none; text-transform: uppercase; font-weight: bold; color: #333; letter-spacing: 1px;">{{
+                        c.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer style="text-align:center; padding: 20px; margin-top: 40px; color: #888; border-top: 1px solid #ddd;">
+        <div style="margin-bottom: 10px;">
+            <a href="{% url 'pages:about' %}" style="text-decoration:none; color:inherit; margin:0 10px;">About Us</a>
+            <a href="{% url 'pages:contact' %}" style="text-decoration:none; color:inherit; margin:0 10px;">Contact</a>
+            <a href="{% url 'pages:policies' %}"
+                style="text-decoration:none; color:inherit; margin:0 10px;">Policies</a>
+        </div>
+        <p>&copy; 2024 Achola Cakes</p>
+    </footer>
+
+    <!-- Floating Chat Widget -->
+    <div class="floating-chat-widget">
+        <div class="chat-mascot">
+            <div class="mascot-avatar">🎂</div>
+            <div class="chat-bubble">
+                <span class="chat-message">Welcome to Acholaicing! 🍰<br>How can we make your day sweeter?</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/25402474562?text=Hello%20Achola%20Cakes!%20I%27m%20interested%20in%20ordering%20a%20cake."
+        class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Chat with us on WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+    </a>
+
+    <style>
+        /* Floating Chat Widget */
+        .floating-chat-widget {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-mascot {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .mascot-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-milk-choco), var(--color-dark-choco));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid white;
+        }
+
+        .chat-bubble {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 220px;
+            position: relative;
+        }
+
+        .chat-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent white transparent transparent;
+        }
+
+        .chat-message {
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.5;
+            font-family: 'Lato', sans-serif;
+        }
+
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .floating-chat-widget {
+                bottom: 90px;
+                left: 15px;
+            }
+
+            .chat-bubble {
+                max-width: 180px;
+                padding: 12px 15px;
+            }
+
+            .chat-message {
+                font-size: 0.8rem;
+            }
+
+            .mascot-avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+            }
+        }
+    </style>
+    <script>
+        window.addEventListener('scroll', function () {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for reveal animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal', 'reveal-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.segment-section, .news-section, .contact-social-segment, .product-grid').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>

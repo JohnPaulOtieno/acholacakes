@@ -1,0 +1,201 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ post.title }} - Achola Cakes{% endblock %}
+
+{% block content %}
+<div class="news-detail-page">
+    <!-- Header with Background Image -->
+    <div class="news-detail-hero"
+        style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ post.image.url }}');">
+        <div class="news-detail-hero-content">
+            <div class="news-detail-tags">{{ post.tags }}</div>
+            <h1 class="news-detail-title">{{ post.title }}</h1>
+            <div class="news-detail-meta">
+                <span class="news-detail-date">{{ post.published_date|date:"F d, Y" }}</span>
+                <span class="news-detail-author">by Achola Cakes</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+    <article class="news-detail-content">
+        <div class="news-detail-excerpt">
+            {{ post.excerpt }}
+        </div>
+
+        <div class="news-detail-body">
+            {{ post.content|linebreaks }}
+        </div>
+
+        <!-- Order and Navigation Buttons -->
+        <div class="news-detail-actions">
+            {% if post.product %}
+            <a href="{{ post.product.get_absolute_url }}" class="btn-claim-order">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                Claim Order - KES {{ post.product.price }}
+            </a>
+            {% endif %}
+            <a href="{% url 'store:product_list' %}" class="btn-back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Home
+            </a>
+        </div>
+    </article>
+</div>
+
+<style>
+    .news-detail-page {
+        max-width: 100%;
+    }
+
+    .news-detail-hero {
+        height: 400px;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin: -20px -20px 0 -20px;
+        position: relative;
+    }
+
+    .news-detail-hero-content {
+        text-align: center;
+        padding: 40px 20px;
+        color: white;
+        width: 100%;
+        max-width: 800px;
+    }
+
+    .news-detail-tags {
+        display: inline-block;
+        background: var(--color-gold);
+        color: #333;
+        padding: 5px 15px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+
+    .news-detail-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .news-detail-meta {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+    .news-detail-date {
+        margin-right: 15px;
+    }
+
+    .news-detail-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 50px 20px;
+    }
+
+    .news-detail-excerpt {
+        font-size: 1.3rem;
+        line-height: 1.8;
+        color: var(--color-milk-choco);
+        font-style: italic;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .news-detail-body {
+        font-size: 1.1rem;
+        line-height: 1.9;
+        color: #444;
+    }
+
+    .news-detail-body p {
+        margin-bottom: 1.5em;
+    }
+
+    .news-detail-actions {
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid #eee;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .btn-claim-order {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--color-gold), #e6b800);
+        color: #333;
+        padding: 14px 30px;
+        text-decoration: none;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 1rem;
+        border-radius: 4px;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .btn-claim-order:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+    }
+
+    .btn-back-home {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--color-milk-choco);
+        color: white;
+        padding: 12px 25px;
+        text-decoration: none;
+        font-weight: bold;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-back-home:hover {
+        background: var(--color-dark-choco);
+        transform: translateX(-5px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .news-detail-hero {
+            height: 300px;
+        }
+
+        .news-detail-title {
+            font-size: 1.8rem;
+        }
+
+        .news-detail-excerpt {
+            font-size: 1.1rem;
+        }
+
+        .news-detail-body {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "store/base.html" %}
+
+{% block title %}Thank You!{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px 0;">
+    <h1 style="color: #4CAF50;">Thank You for Your Order!</h1>
+    <p>Your order number is <strong>{{ order.id }}</strong>.</p>
+    <p>We've received your order and we'll start baking soon!</p>
+
+    <div style="margin-top: 30px;">
+        <a href="{% url 'store:product_list' %}" class="btn">Back to Shop</a>
+    </div>
+</div>
+{% endblock %}

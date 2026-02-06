@@ -1,0 +1,59 @@
+{% extends "store/base.html" %}
+
+{% block title %}My Account{% endblock %}
+
+{% block content %}
+<!-- Full Width Hero -->
+</div> <!-- Close generic container temporarily -->
+<div class="account-hero">
+    <h1>My account</h1>
+    <div class="account-breadcrumb">Home / My account</div>
+</div>
+<div class="container"> <!-- Re-open container -->
+
+    <div class="account-split">
+        <!-- Login Column -->
+        <div class="account-col">
+            <h2>Login</h2>
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                {% if form.errors %}
+                <p style="color: red;">Your username and password didn't match. Please try again.</p>
+                {% endif %}
+
+                <label>Username or email address *</label>
+                {{ form.username }}
+
+                <label>Password *</label>
+                {{ form.password }}
+
+                <div style="margin-top: 20px;">
+                    <input type="submit" value="LOG IN" class="btn"
+                        style="width: 100%; border:none; cursor:pointer; font-weight:bold; letter-spacing:1px; background-color: var(--color-milk-choco);">
+                </div>
+
+                <div class="auth-actions">
+                    <label style="font-weight: normal; cursor: pointer;">
+                        <input type="checkbox" style="width: auto; margin-right: 5px;"> Remember me
+                    </label>
+                    <a href="#" style="color: var(--color-gold);">Lost your password?</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Register Column -->
+        <div class="account-col" style="border-left: 1px solid #eee; padding-left: 60px;">
+            <h2>Register</h2>
+            <p style="margin-bottom: 20px; color: #666;">
+                Registering for this site allows you to access your order status and history. Just fill in the fields
+                below, and we'll get a new account set up for you in no time. We will only ask you for information
+                necessary to make the purchase process faster and easier.
+            </p>
+
+            <!-- We link to the full registration page for cleaner logic, matching the 'Register' button style -->
+            <a href="{% url 'register' %}" class="btn"
+                style="width: 100%; text-align: center; background-color: #888; color: white;">REGISTER</a>
+        </div>
+    </div>
+
+    {% endblock %}
