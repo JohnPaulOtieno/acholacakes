@@ -44,8 +44,8 @@
                     <input type="submit" value="Update" style="padding: 2px 5px;">
                 </form>
             </td>
-            <td style="padding: 10px;">${{ item.price }}</td>
-            <td style="padding: 10px;">${{ item.total_price }}</td>
+            <td style="padding: 10px;">Ksh {{ item.price }}</td>
+            <td style="padding: 10px;">Ksh {{ item.total_price }}</td>
             <td style="padding: 10px;">
                 <form action="{% url 'cart:cart_remove' item.cart_id %}" method="post">
                     {% csrf_token %}
@@ -58,7 +58,7 @@
         {% endfor %}
         <tr style="background: #fafafa; font-weight: bold;">
             <td colspan="3" style="padding: 10px; text-align: right;">Total</td>
-            <td colspan="2" style="padding: 10px;">${{ cart.get_total_price }}</td>
+            <td colspan="2" style="padding: 10px;">Ksh {{ cart.get_total_price }}</td>
         </tr>
     </tbody>
 </table>

@@ -11,11 +11,11 @@
             {% for item in cart %}
             <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
                 <span>{{ item.quantity }}x {{ item.product.name }}</span>
-                <span style="float: right;">${{ item.total_price }}</span>
+                <span style="float: right;">Ksh {{ item.total_price }}</span>
             </li>
             {% endfor %}
             <li style="font-weight: bold; padding-top: 10px; font-size: 1.1em;">
-                Total: <span style="float: right;">${{ cart.get_total_price }}</span>
+                Total: <span style="float: right;">Ksh {{ cart.get_total_price }}</span>
             </li>
         </ul>
     </div>

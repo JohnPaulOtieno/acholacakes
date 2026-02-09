@@ -94,8 +94,7 @@
                         {% with total_items=cart|length %}
                         {% if total_items > 0 %}
                         <span
-                            style="position:absolute; top:-8px; right:-8px; background:var(--color-gold); color:white; border-radius:50%; width:18px; height:18px; font-size:10px; display:flex; justify-content:center; align-items:center;">{{
-                            total_items }}</span>
+                            style="position:absolute; top:-8px; right:-8px; background:var(--color-gold); color:white; border-radius:50%; width:18px; height:18px; font-size:10px; display:flex; justify-content:center; align-items:center;">{{total_items }}</span>
                         {% endif %}
                         {% endwith %}
                     </a>
@@ -111,8 +110,7 @@
                         Shop</a></li>
                 {% for c in categories %}
                 <li><a href="{% url 'store:product_list_by_category' c.slug %}"
-                        style="text-decoration: none; text-transform: uppercase; font-weight: bold; color: #333; letter-spacing: 1px;">{{
-                        c.name }}</a></li>
+                        style="text-decoration: none; text-transform: uppercase; font-weight: bold; color: #333; letter-spacing: 1px;">{{ c.name }}</a></li>
                 {% endfor %}
             </ul>
         </nav>

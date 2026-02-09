@@ -47,8 +47,7 @@
             style="text-decoration:none;">All</a>
         {% for c in categories %}
         <a href="{% url 'store:product_list_by_category' c.slug %}"
-            class="btn-filter {% if category.slug == c.slug %}active{% endif %}" style="text-decoration:none;">{{ c.name
-            }}</a>
+            class="btn-filter {% if category.slug == c.slug %}active{% endif %}" style="text-decoration:none;">{{ c.name }}</a>
         {% endfor %}
     </div>
 </div>
