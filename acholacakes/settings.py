@@ -32,6 +32,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-dev-key")
 
 DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
+PORT = os.environ.get("PORT", "8000")
+
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
     "localhost,127.0.0.1"
